@@ -1,0 +1,24 @@
+{
+  "name": "vue-init-build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./demo.js -i ./data/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cai1994214/vue-init-build.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cai1994214/vue-init-build/issues"
+  },
+  "homepage": "https://github.com/cai1994214/vue-init-build#readme",
+  "dependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
