@@ -10,7 +10,7 @@ const MyPromise = require("./MyPromise");
 //     console.log(reason)
 // })
 
-
+//注释
 var myPromise = new MyPromise((resolve, reject) => {
     // resolve('success');
     // reject('error')
