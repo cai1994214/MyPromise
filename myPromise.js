@@ -2,6 +2,10 @@ const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
 const REJECTED = 'REJECTED';
 
+function resolvePromise(promise2, x, resolve, reject) {
+    console.log(promise2, x)
+}
+
 class MyPromise {
     constructor(executor){
         this.status = PENDING;//状态
@@ -42,29 +46,62 @@ class MyPromise {
     }
 
     then (onFulfilled, onRejected) {
-        //同步
-        if(this.status === PENDING){
-            //订阅
-            this.onFulfilledCallbacks.push(() => {
-                onFulfilled(this.value);
-            })
-            this.onRejectedCallbacks.push(() => {
-                onRejected(this.reason)
-            })
-        }
+        let promise2 = new MyPromise((resolve, reject) => {
+         
+            if(this.status === FULFILLED){
+                setTimeout(() => {//宏任务 处理异步 为了让promise2 命名完成 再调用 x 同理
+                    try{
+                        let x = onFulfilled(this.value);
+                        resolvePromise(promise2, x, resolve, reject);
+                    }catch(e){
+                        reject(e)
+                    }
+                }, 0);
+            }
 
-        if(this.status === FULFILLED){
-            onFulfilled(this.value);
-        }
+            if(this.status === REJECTED){
+                setTimeout(() => {
+                    try{
+                        let x = onRejected(this.reason);
+                        resolvePromise(promise2, x, resolve, reject);
+                    }catch(e){
+                        reject(e)
+                    }
+                }, 0);
+               
+            }
 
-        if(this.status === REJECTED){
-            onRejected(this.reason);
-        }
+            //同步
+            if(this.status === PENDING){
+                //订阅
+                this.onFulfilledCallbacks.push(() => {
+                    try{
+                        let x = onFulfilled(this.value);
+                        resolvePromise(promise2, x, resolve, reject);
+                    }catch(e){
+                        reject(e)
+                    }
+                })
+                this.onRejectedCallbacks.push(() => {
+                    try{
+                        let x = onRejected(this.reason);
+                        resolvePromise(promise2, x, resolve, reject);
+                    }catch(e){
+                        reject(e)
+                    }
+                })
+            }
+        });
+       
+
+        return promise2
     }
 
     catch () {
        
     }
 }
+
+
 
 module.exports = MyPromise
